@@ -5,9 +5,12 @@ var mongojs = require("mongojs");
 var axios = require("axios");
 var request = require("request");
 var cheerio = require("cheerio");
-
-// Initialize Express
 var app = express();
+
+// app.use(express.static("public"));
+app.set('view engine', 'ejs');
+app.use(express.static("public"));
+
 
 // Database configuration
 var databaseUrl = "scraper";
@@ -21,7 +24,7 @@ db.on("error", function (error) {
 
 // Main route (simple Hello World Message)
 app.get("/", function (req, res) {
-    res.send("Hello world");
+    res.render('pages/home');
 });
 
 app.get("/scrape-page", function (req, res) {
@@ -56,20 +59,6 @@ app.get("/scrape-page", function (req, res) {
         })
     });
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Retrieve data from the db
 app.get("/all", function (req, res) {
