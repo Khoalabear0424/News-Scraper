@@ -25,7 +25,7 @@ app.get("/", function (req, res) {
 });
 
 app.get("/scrape-page", function (req, res) {
-    request('https://www.nytimes.com/', function (error, response, body) {
+    request('https://www.nytimes.com/section/technology', function (error, response, body) {
         console.log('error:', error); // Print the error if one occurred
         // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         //console.log(body); // Print the HTML for the Google homepage.
@@ -33,11 +33,11 @@ app.get("/scrape-page", function (req, res) {
         const $ = cheerio.load(body);
         // console.log($('article h2'))
         $('article').each(function (i, elem) {
-            if ($(this).find('li').html()) {
-                console.log('h2 ' + $(this).find('h2').text())
-                console.log('li ' + $(this).find('li').text())
+            if ($(this).find('p').html()) {
+                console.log('h2 :' + $(this).find('h2').text())
+                console.log('p :' + $(this).find('p').text())
 
-                db.scrapedDataNYTimes.insert({ title: $(this).find('h2').text(), summary: $(this).find('li').text() }, function (error, newArticle) {
+                db.scrapedDataNYTimes.insert({ title: $(this).find('h2').text(), summary: $(this).find('p').text() }, function (error, newArticle) {
                     if (error) {
                         console.log(error)
                     } else {
