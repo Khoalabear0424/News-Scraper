@@ -36,14 +36,17 @@ app.get("/scrape-page", function (req, res) {
             if ($(this).find('p').html()) {
                 console.log('h2 :' + $(this).find('h2').text())
                 console.log('p :' + $(this).find('p').text())
+                console.log('href :' + $(this).find('a').attr('href'))
+                console.log('img src :' + $(this).find('img').attr('src'))
+                return false
 
-                db.scrapedDataNYTimes.insert({ title: $(this).find('h2').text(), summary: $(this).find('p').text() }, function (error, newArticle) {
-                    if (error) {
-                        console.log(error)
-                    } else {
-                        console.log('Sucess');
-                    }
-                })
+                // db.scrapedDataNYTimes.insert({ title: $(this).find('h2').text(), summary: $(this).find('p').text() }, function (error, newArticle) {
+                //     if (error) {
+                //         console.log(error)
+                //     } else {
+                //         console.log('Sucess');
+                //     }
+                // })
 
             }
         })
