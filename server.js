@@ -11,7 +11,7 @@ var app = express();
 
 // Database configuration
 var databaseUrl = "scraper";
-var collections = ["scrapedData"];
+var collections = ["scrapedDataNYTimes"];
 
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
@@ -34,13 +34,22 @@ app.get("/scrape-page", function (req, res) {
         // console.log($('article h2'))
         $('article').each(function (i, elem) {
             if ($(this).find('li').html()) {
-                console.log('h2 ' + $(this).find('h2').html())
-                console.log('li ' + $(this).find('li').html())
-                return false;
+                console.log('h2 ' + $(this).find('h2').text())
+                console.log('li ' + $(this).find('li').text())
+
+                db.scrapedDataNYTimes.insert({ title: $(this).find('h2').text(), summary: $(this).find('li').text() }, function (error, newArticle) {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log('Sucess');
+                    }
+                })
+
             }
         })
     });
 })
+
 
 
 
