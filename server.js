@@ -38,15 +38,19 @@ app.get("/scrape-page", function (req, res) {
                 console.log('p :' + $(this).find('p').text())
                 console.log('href :' + $(this).find('a').attr('href'))
                 console.log('img src :' + $(this).find('img').attr('src'))
-                return false
 
-                // db.scrapedDataNYTimes.insert({ title: $(this).find('h2').text(), summary: $(this).find('p').text() }, function (error, newArticle) {
-                //     if (error) {
-                //         console.log(error)
-                //     } else {
-                //         console.log('Sucess');
-                //     }
-                // })
+                db.scrapedDataNYTimes.insert({
+                    title: $(this).find('h2').text(),
+                    summary: $(this).find('p').text(),
+                    link: 'https://www.nytimes.com' + $(this).find('a').attr('href'),
+                    img: $(this).find('img').attr('src')
+                }, function (error, newArticle) {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log(`Added ${newArticle}`);
+                    }
+                })
 
             }
         })
@@ -70,7 +74,7 @@ app.get("/scrape-page", function (req, res) {
 // Retrieve data from the db
 app.get("/all", function (req, res) {
     // Find all results from the scrapedData collection in the db
-    db.scrapedData.find({}, function (error, found) {
+    db.scrapedDataNYTimes.find({}, function (error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
