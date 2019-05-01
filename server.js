@@ -31,7 +31,14 @@ app.get("/scrape-page", function (req, res) {
         //console.log(body); // Print the HTML for the Google homepage.
 
         const $ = cheerio.load(body);
-        console.log($('article'))
+        // console.log($('article h2'))
+        $('article').each(function (i, elem) {
+            if ($(this).find('li').html()) {
+                console.log('h2 ' + $(this).find('h2').html())
+                console.log('li ' + $(this).find('li').html())
+                return false;
+            }
+        })
     });
 })
 
