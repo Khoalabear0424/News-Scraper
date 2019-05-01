@@ -24,7 +24,19 @@ db.on("error", function (error) {
 
 // Main route (simple Hello World Message)
 app.get("/", function (req, res) {
-    res.render('pages/home');
+    db.scrapedDataNYTimes.find({}, function (error, found) {
+        // Throw any errors to the console
+        if (error) {
+            console.log(error);
+        }
+        // If there are no errors, send the data to the browser as json
+        else {
+            res.render('pages/home', {
+                articles: found
+            });
+            // res.send(found)
+        }
+    });
 });
 
 app.get("/scrape-page", function (req, res) {
@@ -54,7 +66,6 @@ app.get("/scrape-page", function (req, res) {
                         console.log(`Added ${newArticle}`);
                     }
                 })
-
             }
         })
     });
