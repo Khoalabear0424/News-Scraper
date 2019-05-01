@@ -39,6 +39,10 @@ app.get("/", function (req, res) {
     });
 });
 
+app.get("/shopping", (req, res) => {
+    res.render('pages/shopping')
+})
+
 app.get("/scrape-page", function (req, res) {
     request('https://www.nytimes.com/section/technology', function (error, response, body) {
         console.log('error:', error); // Print the error if one occurred
