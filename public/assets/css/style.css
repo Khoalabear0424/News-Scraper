@@ -49,3 +49,7 @@
     font-size: 12px;
     font-style: italic; 
 }
+
+a:-webkit-any-link{
+    text-decoration: none !important;
+}
