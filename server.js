@@ -41,9 +41,19 @@ app.get("/", function (req, res) {
 });
 
 app.get("/shopping", (req, res) => {
-    res.render('pages/shopping', {
-        pageTitle: "Shopping"
-    })
+    db.scrapedDataNordStorm.find({}, function (error, found) {
+        // Throw any errors to the console
+        if (error) {
+            console.log(error);
+        }
+        // If there are no errors, send the data to the browser as json
+        else {
+            res.render('pages/shopping', {
+                pageTitle: "Shopping",
+                data: found,
+            })
+        }
+    });
 })
 
 app.get("/scrape-shopping", function (req, res) {
@@ -59,7 +69,7 @@ app.get("/scrape-shopping", function (req, res) {
             // console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
             // console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
             // console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
-            db.scrapedDataNYTimes.insert({
+            db.scrapedDataNordStorm.insert({
                 name: $(this).find('h3').find('span').text(),
                 src: $(this).find('div').find('img').attr('src'),
                 link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
@@ -75,12 +85,9 @@ app.get("/scrape-shopping", function (req, res) {
                     console.log(`Added item ${i}`);
                 }
             })
-            return false;
         })
-    });
+    })
 })
-
-// scrapedDataNordStorm
 
 app.get("/scrape-page", function (req, res) {
     request('https://www.nytimes.com/section/technology', function (error, response, body) {
@@ -120,6 +127,20 @@ app.get("/scrape-page", function (req, res) {
 app.get("/all", function (req, res) {
     // Find all results from the scrapedData collection in the db
     db.scrapedDataNYTimes.find({}, function (error, found) {
+        // Throw any errors to the console
+        if (error) {
+            console.log(error);
+        }
+        // If there are no errors, send the data to the browser as json
+        else {
+            res.json(found);
+        }
+    });
+});
+
+app.get("/nordstrom", function (req, res) {
+    // Find all results from the scrapedData collection in the db
+    db.scrapedDataNordStorm.find({}, function (error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
