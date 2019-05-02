@@ -46,6 +46,24 @@ app.get("/shopping", (req, res) => {
     })
 })
 
+app.get("/scrape-shopping", function (req, res) {
+    request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
+        console.log('error:', error);
+        const $ = cheerio.load(body);
+        // $('article').each((i, elem) => {
+        //     // if ($(this).find('h3').html()) {
+        //     //     console.log($(this).find('h3').text())
+        //     //     return false;
+        //     // }
+
+        //     console.log($(this).html())
+        //     return false;
+        // })
+        console.log($('article'))
+        res.send($('article').html())
+    });
+})
+
 app.get("/scrape-page", function (req, res) {
     request('https://www.nytimes.com/section/technology', function (error, response, body) {
         console.log('error:', error); // Print the error if one occurred
@@ -77,6 +95,8 @@ app.get("/scrape-page", function (req, res) {
         })
     });
 })
+
+
 
 // Retrieve data from the db
 app.get("/all", function (req, res) {
