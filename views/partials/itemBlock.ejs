@@ -1,12 +1,15 @@
-<div class="container">
-    <img class="itemImage" src="https://assets.adidas.com/images/h_600,f_auto,q_auto:sensitive,fl_lossy/6a8f277daf5f4748a739a998016785f4_9366/Asweerun_Shoes_White_F36340_01_standard.jpg"
-        alt="">
-    <h5>Item Name</h5>
-    <p class="priceDisplay"><span class="originalPrice">$50</span><span class="price"> $25 </span> <span class="percentOff">(50%
-            off)</span></p>
-    <p class="lead">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Enim earum
-        dolorem aperiam
-        quaerat vel itaque deleniti cumque, sapiente nihil est neque sint beatae omnis suscipit nostrum sit
-        natus ipsa ab? Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis, ipsa.</p>
-</div>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <img class="itemImage" src="<%= data[i].src %>" alt="Image Item">
+        <a href="<%= data[i].link %>">
+            <h5>
+                <%= data[i].name %>
+            </h5>
+        </a>
+        <p class="priceDisplay"><span class="originalPrice">
+                <%= data[i].price.prev %></span><span class="price">
+                <%= data[i].price.curr %> </span> <span class="percentOff">
+                <%= data[i].price.discount %></span></p>
+        <p class="lead">Lorem ipsum, dolor sit amet.</p>
+    </div>
 </div>
