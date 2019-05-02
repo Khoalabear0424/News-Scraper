@@ -32,7 +32,8 @@ app.get("/", function (req, res) {
         // If there are no errors, send the data to the browser as json
         else {
             res.render('pages/home', {
-                articles: found
+                articles: found,
+                pageTitle: "Home"
             });
             // res.send(found)
         }
@@ -40,7 +41,9 @@ app.get("/", function (req, res) {
 });
 
 app.get("/shopping", (req, res) => {
-    res.render('pages/shopping')
+    res.render('pages/shopping', {
+        pageTitle: "Shopping"
+    })
 })
 
 app.get("/scrape-page", function (req, res) {

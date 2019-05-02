@@ -1,6 +1,16 @@
-nav {
-    height: 25px;
-    position: absolute;
-    top: 5px;
-    right: 5px;
+
+.navbar{
+    background-color: lightslategray;
+}
+
+.nav-item{
+    display: inline-block;
+}
+
+.nav-item a{
+    color: white;
+}
+
+.nav-item a:hover{
+    color: lightblue;
 }
