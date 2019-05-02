@@ -60,8 +60,6 @@ app.get("/shopping", (req, res) => {
 //res.send($('article div').find('span').next().next().text())
 //res.send($('article div').find('span').last().prev().text())
 
-//ERROR HERE
-
 app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
         console.log('error:', error);
