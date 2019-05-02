@@ -58,10 +58,12 @@ app.get("/scrape-shopping", function (req, res) {
         //console.log('img src \n' + $('article div').find('img').attr('src'))
         //console.log('item link \n' + 'https://shop.nordstrom.com' + $('article a').attr('href'))
         //console.log('previous price \n' + $('article div').find('span').next().html())
+        //console.log('discounted price \n' + $('article span').eq(6).html())
         //console.log('%off \n' + $('article div').find('span').next().next().html())
 
 
-        res.send($('article a').attr('href'))
+
+        res.send($('article span').eq(6).html())
         // $('article').each((i, elem) => {
         //     console.log($(this))
         //     res.send($(this).html())
