@@ -51,13 +51,17 @@ app.get("/scrape-shopping", function (req, res) {
         console.log('error:', error);
         const $ = cheerio.load(body);
         // console.log($('article'))
-        // res.send($('article').html())
+        //res.send($('article').html())
 
         //THIS WORKS
-        //console.log('h3 element \n' + $('article').find('h3').html())
-        //console.log($('article div').find('img').attr('src'))
+        //console.log('h3 element \n' + $('article h3').find('span').text())
+        //console.log('img src \n' + $('article div').find('img').attr('src'))
+        //console.log('item link \n' + 'https://shop.nordstrom.com' + $('article a').attr('href'))
+        //console.log('previous price \n' + $('article div').find('span').next().html())
+        //console.log('%off \n' + $('article div').find('span').next().next().html())
 
-        res.send($('article div').find('img').attr('src'))
+
+        res.send($('article a').attr('href'))
         // $('article').each((i, elem) => {
         //     console.log($(this))
         //     res.send($(this).html())
