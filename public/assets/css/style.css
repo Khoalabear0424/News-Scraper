@@ -18,3 +18,20 @@
 .nav-item a:hover{
     color: lightblue;
 }
+
+.jumbotron-fluid{
+    border-radius: 5px !important;
+    height: 600px;
+    padding-top: 10px;
+}
+
+.itemImage{
+    width: 100%;
+    height: 60%;
+    margin-bottom: 5px;
+    margin-top: 0px;
+}
+
+.price{
+
+}
