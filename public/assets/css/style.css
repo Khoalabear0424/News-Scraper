@@ -3,6 +3,10 @@
     background-color: lightslategray;
 }
 
+.navbar-brand{
+    color: white;
+}
+
 .nav-item{
     display: inline-block;
 }
