@@ -61,14 +61,15 @@ app.get("/scrape-shopping", function (req, res) {
         //console.log('discounted price \n' + $('article span').eq(6).html())
         //console.log('%off \n' + $('article div').find('span').next().next().html())
 
-
-
-        res.send($('article span').eq(6).html())
-        // $('article').each((i, elem) => {
-        //     console.log($(this))
-        //     res.send($(this).html())
-        //     return false;
-        // })
+        $('article').each(function (i, elem) {
+            console.log('img src \n' + $(this).find('div').find('img').attr('src') + '\n\n');
+            console.log('item link \n' + 'https://shop.nordstrom.com' + $(this).find('a').attr('href') + '\n\n');
+            console.log('h3 element \n' + $(this).find('h3').find('span').text() + '\n\n');
+            console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
+            console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
+            console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
+            return false;
+        })
     });
 })
 
