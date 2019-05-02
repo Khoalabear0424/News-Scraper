@@ -50,17 +50,19 @@ app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
         console.log('error:', error);
         const $ = cheerio.load(body);
-        // $('article').each((i, elem) => {
-        //     // if ($(this).find('h3').html()) {
-        //     //     console.log($(this).find('h3').text())
-        //     //     return false;
-        //     // }
+        // console.log($('article'))
+        // res.send($('article').html())
 
-        //     console.log($(this).html())
+        //THIS WORKS
+        //console.log('h3 element \n' + $('article').find('h3').html())
+        //console.log($('article div').find('img').attr('src'))
+
+        res.send($('article div').find('img').attr('src'))
+        // $('article').each((i, elem) => {
+        //     console.log($(this))
+        //     res.send($(this).html())
         //     return false;
         // })
-        console.log($('article'))
-        res.send($('article').html())
     });
 })
 
