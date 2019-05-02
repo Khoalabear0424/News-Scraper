@@ -14,7 +14,7 @@ app.use(express.static("public"));
 
 // Database configuration
 var databaseUrl = "scraper";
-var collections = ["scrapedDataNYTimes"];
+var collections = ["scrapedDataNYTimes", "scrapedDataNordStorm"];
 
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
@@ -50,28 +50,37 @@ app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
         console.log('error:', error);
         const $ = cheerio.load(body);
-        // console.log($('article'))
         //res.send($('article').html())
 
-        //THIS WORKS
-        //console.log('h3 element \n' + $('article h3').find('span').text())
-        //console.log('img src \n' + $('article div').find('img').attr('src'))
-        //console.log('item link \n' + 'https://shop.nordstrom.com' + $('article a').attr('href'))
-        //console.log('previous price \n' + $('article div').find('span').next().html())
-        //console.log('discounted price \n' + $('article span').eq(6).html())
-        //console.log('%off \n' + $('article div').find('span').next().next().html())
-
         $('article').each(function (i, elem) {
-            console.log('img src \n' + $(this).find('div').find('img').attr('src') + '\n\n');
-            console.log('item link \n' + 'https://shop.nordstrom.com' + $(this).find('a').attr('href') + '\n\n');
-            console.log('h3 element \n' + $(this).find('h3').find('span').text() + '\n\n');
-            console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
-            console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
-            console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
+            // console.log('img src \n' + $(this).find('div').find('img').attr('src') + '\n\n');
+            // console.log('item link \n' + 'https://shop.nordstrom.com' + $(this).find('a').attr('href') + '\n\n');
+            // console.log('h3 element \n' + $(this).find('h3').find('span').text() + '\n\n');
+            // console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
+            // console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
+            // console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
+            db.scrapedDataNYTimes.insert({
+                name: $(this).find('h3').find('span').text(),
+                src: $(this).find('div').find('img').attr('src'),
+                link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
+                price: {
+                    prev: $(this).find('div').find('span').next().html(),
+                    curr: $(this).find('span').eq(6).html(),
+                    discount: $(this).find('span').eq(7).html()
+                }
+            }, function (error, newItem) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log(`Added item ${i}`);
+                }
+            })
             return false;
         })
     });
 })
+
+// scrapedDataNordStorm
 
 app.get("/scrape-page", function (req, res) {
     request('https://www.nytimes.com/section/technology', function (error, response, body) {
