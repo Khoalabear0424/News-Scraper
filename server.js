@@ -12,12 +12,9 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-// Database configuration
 var databaseUrl = "scraper";
 var collections = ["scrapedData", "savedItems"];
 
-// Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
 db.on("error", function (error) {
     console.log("Database Error:", error);
