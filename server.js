@@ -74,27 +74,30 @@ app.get("/scrape-shopping", function (req, res) {
             // console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
             // console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
 
-            // db.scrapedDataNordStorm.insert({
-            //     name: $(this).find('h3').find('span').text(),
-            //     src: $(this).find('div').find('img').attr('src'),
-            //     link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
-            //     price: {
-            //         prev: $($($(this)).children().eq(-2)).children().children().next().html(),
-            //         curr: $($($(this)).children().eq(-2)).children().children().eq(-2).html(),
-            //         discount: $($($(this)).children().eq(-2)).children().children().eq(-1).html()
-            //     }
-            // }, function (error, newItem) {
-            //     if (error) {
-            //         console.log(error)
-            //     } else {
-            //         console.log(`Added item ${i}`);
-            //     }
-            // })
+            db.scrapedDataNordStorm.insert({
+                name: $(this).find('h3').find('span').text(),
+                src: $(this).find('div').find('img').attr('src'),
+                link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
+                price: {
+                    prev: $($($(this))).find('div').eq(-2).children().last().text().split(" ")[0],
+                    curr: $($($(this))).find('div').eq(-1).children().eq(-2).text().split(" ")[0],
+                    discount: $($($(this))).find('div').eq(-1).children().last().html()
+                }
+            }, function (error, newItem) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log(`Added item ${i}`);
+                }
+            })
         })
 
-        //res.send($($('article')[10]).find('div').eq(-1).children().last().html());
-        //res.send($($('article')[10]).find('div').eq(-1).children().eq(-2).html());
-        //res.send($($('article')[10]).find('div').eq(-2).children().last().html());
+        // prev res.send($($('article')[10]).find('div').eq(-2).children().last().html());
+        // current price res.send($($('article')[10]).find('div').eq(-1).children().eq(-2).html());
+        // discount res.send($($('article')[10]).find('div').eq(-1).children().last().html());
+
+        //edge case
+        // res.send($($('article')[50]).find('div').eq(-1).children().eq(-2).html().split(" ")[0]);
     })
 })
 
