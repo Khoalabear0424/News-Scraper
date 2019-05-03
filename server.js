@@ -45,8 +45,18 @@ app.get("/", function (req, res) {
 });
 
 app.get("/saved", function (req, res) {
-    res.render('pages/saved', {
-        pageTitle: "Saved Items"
+    db.savedItems.find({
+        "type": "news"
+    }, function (error, found) {
+        if (error) {
+            console.log(error);
+        }
+        else {
+            res.render('pages/saved', {
+                pageTitle: "Saved Articles",
+                articles: found,
+            })
+        }
     });
 });
 
@@ -154,9 +164,7 @@ app.post('/save-item', (req, res) => {
             console.log(error);
         }
         else {
-            db.savedItems.insert({
-                found
-            }, function (error, savedItem) {
+            db.savedItems.insert(found, function (error, savedItem) {
                 if (error) {
                     console.log(error)
                 } else {
