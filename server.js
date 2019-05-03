@@ -6,10 +6,12 @@ var axios = require("axios");
 var request = require("request");
 var cheerio = require("cheerio");
 var app = express();
+var bodyParser = require('body-parser');
 
-// app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 
 // Database configuration
@@ -22,25 +24,24 @@ db.on("error", function (error) {
     console.log("Database Error:", error);
 });
 
-// Main route (simple Hello World Message)
+
+
+//-------------------ROUTES----------------//
+
 app.get("/", function (req, res) {
     db.scrapedDataNYTimes.find({}, function (error, found) {
-        // Throw any errors to the console
         if (error) {
             console.log(error);
         }
-        // If there are no errors, send the data to the browser as json
         else {
             res.render('pages/home', {
                 articles: found,
                 pageTitle: "Home"
             });
-            // res.send(found)
         }
     });
 });
 
-// Main route (simple Hello World Message)
 app.get("/saved", function (req, res) {
     res.render('pages/saved', {
         pageTitle: "Saved Items"
@@ -49,11 +50,9 @@ app.get("/saved", function (req, res) {
 
 app.get("/shopping", (req, res) => {
     db.scrapedDataNordStorm.find({}, function (error, found) {
-        // Throw any errors to the console
         if (error) {
             console.log(error);
         }
-        // If there are no errors, send the data to the browser as json
         else {
             res.render('pages/shopping', {
                 pageTitle: "Shopping",
@@ -62,6 +61,9 @@ app.get("/shopping", (req, res) => {
         }
     });
 })
+
+
+//----------------WEB SCRAPE--------------//
 
 app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
@@ -99,12 +101,7 @@ app.get("/scrape-shopping", function (req, res) {
 
 app.get("/scrape-page", function (req, res) {
     request('https://www.nytimes.com/section/technology', function (error, response, body) {
-        console.log('error:', error); // Print the error if one occurred
-        // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        //console.log(body); // Print the HTML for the Google homepage.
-
         const $ = cheerio.load(body);
-        // console.log($('article h2'))
         $('article').each(function (i, elem) {
             if ($(this).find('p').html()) {
                 db.scrapedDataNYTimes.insert({
@@ -125,6 +122,7 @@ app.get("/scrape-page", function (req, res) {
 })
 
 
+//----------------API----------------//
 
 // Retrieve data from the db
 app.get("/all-articles", function (req, res) {
@@ -152,72 +150,11 @@ app.get("/all-nordstrom", function (req, res) {
     });
 });
 
+app.post('/save-item', (req, res) => {
+    console.log(req.body.item_id);
+})
 
 
-
-
-
-
-
-
-
-
-// app.post("/article", function (req, res) {
-//     db.scrapedData.insert({ name: "khoa" }, function (error, newArticle) {
-//         if (error) {
-//             console.log(error)
-//         } else {
-//             res.json(newArticle);
-//         }
-//     })
-// })
-
-
-
-
-
-
-
-
-
-
-
-// Scrape data from one site and place it into the mongodb db
-app.get("/scrape", function (req, res) {
-    // Make a request via axios for the news section of `ycombinator`
-    axios.get("https://news.ycombinator.com/").then(function (response) {
-        // Load the html body from axios into cheerio
-        var $ = cheerio.load(response.data);
-        // For each element with a "title" class
-        $(".title").each(function (i, element) {
-            // Save the text and href of each link enclosed in the current element
-            var title = $(element).children("a").text();
-            var link = $(element).children("a").attr("href");
-
-            // If this found element had both a title and a link
-            if (title && link) {
-                // Insert the data in the scrapedData db
-                db.scrapedData.insert({
-                    title: title,
-                    link: link
-                },
-                    function (err, inserted) {
-                        if (err) {
-                            // Log the error if one is encountered during the query
-                            console.log(err);
-                        }
-                        else {
-                            // Otherwise, log the inserted data
-                            console.log(inserted);
-                        }
-                    });
-            }
-        });
-    });
-
-    // Send a "Scrape Complete" message to the browser
-    res.send("Scrape Complete");
-});
 
 
 // Listen on port 3000

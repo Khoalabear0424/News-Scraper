@@ -1,19 +1,19 @@
 <div class="jumbotron jumbotron-fluid">
-    <div class="container">
-        <img class="itemImage" src="<%= data[i].src %>" alt="Image Item">
-        <a href="<%= data[i].link %>">
-            <h5>
-                <%= data[i].name %>
-            </h5>
-        </a>
-        <p class="priceDisplay"><span class="originalPrice">
-                <%= data[i].price.prev %></span><span class="price">
-                <%= data[i].price.curr %> </span> <span class="percentOff">
-                <%= data[i].price.discount %></span> <button class="btn-success btn btn-sm">Save</button></p>
-        <!-- <p class="lead">Lorem ipsum, dolor sit amet.</p> -->
-        <form action="">
-            <input type="text">
-            <button class="btn btn-primary btn-sm">Submit</button>
-        </form>
-    </div>
+    <div class="container" data-id="<%= data[i]._id %>"></div>">
+    <img class="itemImage" src="<%= data[i].src %>" alt="Image Item">
+    <a href="<%= data[i].link %>">
+        <h5>
+            <%= data[i].name %>
+        </h5>
+    </a>
+    <p class="priceDisplay"><span class="originalPrice">
+            <%= data[i].price.prev %></span><span class="price">
+            <%= data[i].price.curr %> </span> <span class="percentOff">
+            <%= data[i].price.discount %></span> <button class="btn-success btn btn-sm" data-id="<%= articles[i]._id %>">Save</button></p>
+    <!-- <p class="lead">Lorem ipsum, dolor sit amet.</p> -->
+    <form action="">
+        <input type="text">
+        <button class="btn btn-primary btn-sm">Submit</button>
+    </form>
+</div>
 </div>
