@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 // Database configuration
 var databaseUrl = "scraper";
-var collections = ["scrapedDataNYTimes", "scrapedDataNordStorm", "savedItems"];
+var collections = ["scrapedData", "savedItems"];
 
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
@@ -29,7 +29,9 @@ db.on("error", function (error) {
 //-------------------ROUTES----------------//
 
 app.get("/", function (req, res) {
-    db.scrapedDataNYTimes.find({}, function (error, found) {
+    db.scrapedData.find({
+        "type": "news"
+    }, function (error, found) {
         if (error) {
             console.log(error);
         }
@@ -49,7 +51,9 @@ app.get("/saved", function (req, res) {
 });
 
 app.get("/shopping", (req, res) => {
-    db.scrapedDataNordStorm.find({}, function (error, found) {
+    db.scrapedData.find({
+        "type": "shopping"
+    }, function (error, found) {
         if (error) {
             console.log(error);
         }
@@ -72,7 +76,7 @@ app.get("/scrape-shopping", function (req, res) {
         // res.send($('article').html())
 
         $('article').each(function (i, elem) {
-            db.scrapedDataNordStorm.insert({
+            db.scrapedData.insert({
                 name: $(this).find('h3').find('span').text(),
                 src: $(this).find('div').find('img').attr('src'),
                 link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
@@ -80,7 +84,8 @@ app.get("/scrape-shopping", function (req, res) {
                     prev: $($($(this))).find('div').eq(-2).children().last().text().split(" ")[0],
                     curr: $($($(this))).find('div').eq(-1).children().eq(-2).text().split(" ")[0],
                     discount: $($($(this))).find('div').eq(-1).children().last().html()
-                }
+                },
+                type: "shopping"
             }, function (error, newItem) {
                 if (error) {
                     console.log(error)
@@ -104,11 +109,12 @@ app.get("/scrape-page", function (req, res) {
         const $ = cheerio.load(body);
         $('article').each(function (i, elem) {
             if ($(this).find('p').html()) {
-                db.scrapedDataNYTimes.insert({
+                db.scrapedData.insert({
                     title: $(this).find('h2').text(),
                     summary: $(this).find('p').text(),
                     link: 'https://www.nytimes.com' + $(this).find('a').attr('href'),
-                    img: $(this).find('img').attr('src')
+                    img: $(this).find('img').attr('src'),
+                    type: "news"
                 }, function (error, newArticle) {
                     if (error) {
                         console.log(error)
@@ -125,9 +131,9 @@ app.get("/scrape-page", function (req, res) {
 //----------------API----------------//
 
 // Retrieve data from the db
-app.get("/all-articles", function (req, res) {
+app.get("/all-data", function (req, res) {
     // Find all results from the scrapedData collection in the db
-    db.scrapedDataNYTimes.find({}, function (error, found) {
+    db.scrapedData.find({}, function (error, found) {
         // Throw any errors to the console
         if (error) {
             console.log(error);
@@ -139,19 +145,26 @@ app.get("/all-articles", function (req, res) {
     });
 });
 
-app.get("/all-nordstrom", function (req, res) {
-    db.scrapedDataNordStorm.find({}, function (error, found) {
+app.post('/save-item', (req, res) => {
+    console.log(req.body.item_id)
+    db.scrapedData.find({
+        "_id": mongojs.ObjectId(req.body.item_id)
+    }, function (error, found) {
         if (error) {
             console.log(error);
         }
         else {
-            res.json(found);
+            db.savedItems.insert({
+                found
+            }, function (error, savedItem) {
+                if (error) {
+                    console.log(error)
+                } else {
+                    console.log(`Saved item ${savedItem}`);
+                }
+            })
         }
     });
-});
-
-app.post('/save-item', (req, res) => {
-    console.log(req.body.item_id);
 })
 
 
