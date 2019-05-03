@@ -102,7 +102,11 @@ app.get("/scrape-shopping", function (req, res) {
             })
         })
 
+        //THIS IS SPECIFIC TO NORDSTROM ONLY
         // prev res.send($($('article')[10]).find('div').eq(-2).children().last().html());
+        // current price res.send($($('article')[10]).find('div').eq(-1).children().eq(-2).html());
+        // discount res.send($($('article')[10]).find('div').eq(-1).children().last().html());
+
         //edge case
         // res.send($($('article')[50]).find('div').eq(-1).children().eq(-2).html().split(" ")[0]);
     })
