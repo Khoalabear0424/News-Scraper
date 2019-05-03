@@ -64,32 +64,41 @@ app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
         console.log('error:', error);
         const $ = cheerio.load(body);
-        //res.send($('article').html())
+        // res.send($('article').html())
 
         $('article').each(function (i, elem) {
-            // console.log('img src \n' + $(this).find('div').find('img').attr('src') + '\n\n');
-            // console.log('item link \n' + 'https://shop.nordstrom.com' + $(this).find('a').attr('href') + '\n\n');
-            // console.log('h3 element \n' + $(this).find('h3').find('span').text() + '\n\n');
-            // console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
-            // console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
-            // console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
-            db.scrapedDataNordStorm.insert({
-                name: $(this).find('h3').find('span').text(),
-                src: $(this).find('div').find('img').attr('src'),
-                link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
-                price: {
-                    prev: $(this).find('div').find('span').next().html(),
-                    curr: $(this).find('span').eq(6).html(),
-                    discount: $(this).find('span').eq(7).html()
-                }
-            }, function (error, newItem) {
-                if (error) {
-                    console.log(error)
-                } else {
-                    console.log(`Added item ${i}`);
-                }
-            })
+            //     // console.log('img src \n' + $(this).find('div').find('img').attr('src') + '\n\n');
+            //     // console.log('item link \n' + 'https://shop.nordstrom.com' + $(this).find('a').attr('href') + '\n\n');
+            //     // console.log('h3 element \n' + $(this).find('h3').find('span').text() + '\n\n');
+            //     // console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
+            //     // console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
+            //     // console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
+
+            //     db.scrapedDataNordStorm.insert({
+            //         name: $(this).find('h3').find('span').text(),
+            //         src: $(this).find('div').find('img').attr('src'),
+            //         link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
+            //         price: {
+            //             prev: $(this).find('div').find('span').next().html(),
+            //             curr: $(this).find('span').eq(6).html(),
+            //             discount: $(this).find('span').eq(7).html()
+            //         }
+            //     }, function (error, newItem) {
+            //         if (error) {
+            //             console.log(error)
+            //         } else {
+            //             console.log(`Added item ${i}`);
+            //         }
+            //     })
+            res.send($($(this)).children().eq(-2).html())
+            return false
         })
+
+        // console.log(Object.keys($('article')[0]));
+        var l = $('article')[2].length
+        res.send($($('article')[2]).children().eq(-2).html());
+        $($(this)).children().eq(-2).html()
+        // console.log($($('article')[3]).children().html());
     })
 })
 
