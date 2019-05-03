@@ -80,6 +80,7 @@ app.get("/scrape-shopping", function (req, res) {
         console.log('error:', error);
         const $ = cheerio.load(body);
         // res.send($('article').html())
+        //entire article object for reference
 
         $('article').each(function (i, elem) {
             db.scrapedData.insert({
