@@ -14,7 +14,7 @@ app.use(express.static("public"));
 
 // Database configuration
 var databaseUrl = "scraper";
-var collections = ["scrapedDataNYTimes", "scrapedDataNordStorm"];
+var collections = ["scrapedDataNYTimes", "scrapedDataNordStorm", "savedItems"];
 
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
@@ -63,10 +63,6 @@ app.get("/shopping", (req, res) => {
     });
 })
 
-//res.send($('article div').find('span').next().text())
-//res.send($('article div').find('span').next().next().text())
-//res.send($('article div').find('span').last().prev().text())
-
 app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
         console.log('error:', error);
@@ -74,13 +70,6 @@ app.get("/scrape-shopping", function (req, res) {
         // res.send($('article').html())
 
         $('article').each(function (i, elem) {
-            // console.log('img src \n' + $(this).find('div').find('img').attr('src') + '\n\n');
-            // console.log('item link \n' + 'https://shop.nordstrom.com' + $(this).find('a').attr('href') + '\n\n');
-            // console.log('h3 element \n' + $(this).find('h3').find('span').text() + '\n\n');
-            // console.log('previous price \n' + $(this).find('div').find('span').next().html() + '\n\n');
-            // console.log('discounted price \n' + $(this).find('span').eq(6).html() + '\n\n');
-            // console.log('%off \n' + $(this).find('span').eq(7).html() + '\n\n')
-
             db.scrapedDataNordStorm.insert({
                 name: $(this).find('h3').find('span').text(),
                 src: $(this).find('div').find('img').attr('src'),
@@ -118,11 +107,6 @@ app.get("/scrape-page", function (req, res) {
         // console.log($('article h2'))
         $('article').each(function (i, elem) {
             if ($(this).find('p').html()) {
-                console.log('h2 :' + $(this).find('h2').text())
-                console.log('p :' + $(this).find('p').text())
-                console.log('href :' + $(this).find('a').attr('href'))
-                console.log('img src :' + $(this).find('img').attr('src'))
-
                 db.scrapedDataNYTimes.insert({
                     title: $(this).find('h2').text(),
                     summary: $(this).find('p').text(),
@@ -143,7 +127,7 @@ app.get("/scrape-page", function (req, res) {
 
 
 // Retrieve data from the db
-app.get("/all", function (req, res) {
+app.get("/all-articles", function (req, res) {
     // Find all results from the scrapedData collection in the db
     db.scrapedDataNYTimes.find({}, function (error, found) {
         // Throw any errors to the console
@@ -157,7 +141,7 @@ app.get("/all", function (req, res) {
     });
 });
 
-app.get("/nordstrom", function (req, res) {
+app.get("/all-nordstrom", function (req, res) {
     db.scrapedDataNordStorm.find({}, function (error, found) {
         if (error) {
             console.log(error);
