@@ -40,6 +40,13 @@ app.get("/", function (req, res) {
     });
 });
 
+// Main route (simple Hello World Message)
+app.get("/saved", function (req, res) {
+    res.render('pages/saved', {
+        pageTitle: "Saved Items"
+    });
+});
+
 app.get("/shopping", (req, res) => {
     db.scrapedDataNordStorm.find({}, function (error, found) {
         // Throw any errors to the console
