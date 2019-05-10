@@ -79,12 +79,13 @@ app.get("/scrape-shopping", function (req, res) {
     request('https://shop.nordstrom.com/c/all-womens-sale', function (error, response, body) {
         console.log('error:', error);
         const $ = cheerio.load(body);
-        // res.send($('article').html())
+        //res.send($('article').html())
         //entire article object for reference
 
         $('article').each(function (i, elem) {
             db.scrapedData.insert({
-                name: $(this).find('h3').find('span').text(),
+                name: $($($(this))).find('h3').children().children().text(),
+                // description: $(this).find('h3').find('span').text(),
                 src: $(this).find('div').find('img').attr('src'),
                 link: 'https://shop.nordstrom.com' + $(this).find('a').attr('href'),
                 price: {
@@ -106,6 +107,7 @@ app.get("/scrape-shopping", function (req, res) {
         // prev res.send($($('article')[10]).find('div').eq(-2).children().last().html());
         // current price res.send($($('article')[10]).find('div').eq(-1).children().eq(-2).html());
         // discount res.send($($('article')[10]).find('div').eq(-1).children().last().html());
+        // item name res.send($($('article')[0]).find('h3').children().children().text());
 
         //edge case
         // res.send($($('article')[50]).find('div').eq(-1).children().eq(-2).html().split(" ")[0]);
